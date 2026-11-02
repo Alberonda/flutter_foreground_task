@@ -1,3 +1,7 @@
+## 10.1.0
+
+* [**FEAT**] Support determinate and indeterminate progress in the foreground notification.
+
 ## 10.0.0
 
 * [**CHORE**] Bump minimum supported SDK version to `Flutter 3.38.0`
