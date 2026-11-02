@@ -71,7 +71,7 @@ class MethodCallHandlerImpl(private val context: Context, private val provider: 
                 }
 
                 "stopService" -> {
-                    provider.getForegroundServiceManager().stop(context)
+                    provider.getForegroundServiceManager().stop(context, args)
                     result.success(true)
                 }
 

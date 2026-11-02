@@ -81,6 +81,8 @@ class MethodChannelFlutterForegroundTask extends FlutterForegroundTaskPlatform {
     NotificationIcon? notificationIcon,
     NotificationProgress? notificationProgress,
     List<NotificationButton>? notificationButtons,
+    bool? notificationOngoing,
+    bool? notificationAutoCancel,
     String? notificationInitialRoute,
     Function? callback,
   }) async {
@@ -91,6 +93,8 @@ class MethodChannelFlutterForegroundTask extends FlutterForegroundTaskPlatform {
       notificationIcon: notificationIcon,
       notificationProgress: notificationProgress,
       notificationButtons: notificationButtons,
+      notificationOngoing: notificationOngoing,
+      notificationAutoCancel: notificationAutoCancel,
       notificationInitialRoute: notificationInitialRoute,
       callback: callback,
     ).toJson(platform);
@@ -99,8 +103,8 @@ class MethodChannelFlutterForegroundTask extends FlutterForegroundTaskPlatform {
   }
 
   @override
-  Future<void> stopService() async {
-    await mMDChannel.invokeMethod('stopService');
+  Future<void> stopService({bool removeNotification = true}) async {
+    await mMDChannel.invokeMethod('stopService', removeNotification);
   }
 
   @override

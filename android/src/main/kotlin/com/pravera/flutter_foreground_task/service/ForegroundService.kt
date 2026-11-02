@@ -38,6 +38,7 @@ class ForegroundService : Service() {
         private const val ACTION_NOTIFICATION_BUTTON_PRESSED = "onNotificationButtonPressed"
         private const val ACTION_RECEIVE_DATA = "onReceiveData"
         private const val INTENT_DATA_NAME = "intentData"
+        const val INTENT_REMOVE_NOTIFICATION = "removeNotification"
 
         private val _isRunningServiceState = MutableStateFlow(false)
         val isRunningServiceState = _isRunningServiceState.asStateFlow()
@@ -139,7 +140,9 @@ class ForegroundService : Service() {
         val isSetStopWithTaskFlag = ForegroundServiceUtils.isSetStopWithTaskFlag(this)
 
         if (action == ForegroundServiceAction.API_STOP) {
-            stopForegroundService()
+            val removeNotification =
+                intent?.getBooleanExtra(INTENT_REMOVE_NOTIFICATION, true) ?: true
+            stopForegroundService(removeNotification)
             return START_NOT_STICKY
         }
 
@@ -291,11 +294,11 @@ class ForegroundService : Service() {
         _isRunningServiceState.update { true }
     }
 
-    private fun stopForegroundService() {
+    private fun stopForegroundService(removeNotification: Boolean = true) {
         RestartReceiver.cancelRestartAlarm(this)
 
         releaseLockMode()
-        stopForeground(true)
+        stopForeground(removeNotification)
         stopSelf()
 
         _isRunningServiceState.update { false }
@@ -355,7 +358,8 @@ class ForegroundService : Service() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val builder = Notification.Builder(this, notificationOptions.channelId)
-            builder.setOngoing(true)
+            builder.setOngoing(notificationOptions.ongoing)
+            builder.setAutoCancel(notificationOptions.autoCancel)
             builder.setShowWhen(notificationOptions.showWhen)
             builder.setSmallIcon(iconResId)
             builder.setContentIntent(contentIntent)
@@ -389,7 +393,8 @@ class ForegroundService : Service() {
             return builder.build()
         } else {
             val builder = NotificationCompat.Builder(this, notificationOptions.channelId)
-            builder.setOngoing(true)
+            builder.setOngoing(notificationOptions.ongoing)
+            builder.setAutoCancel(notificationOptions.autoCancel)
             builder.setShowWhen(notificationOptions.showWhen)
             builder.setSmallIcon(iconResId)
             builder.setContentIntent(contentIntent)

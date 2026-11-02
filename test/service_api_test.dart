@@ -196,7 +196,23 @@ void main() {
       expect(result2, isA<ServiceRequestSuccess>());
       expect(
         methodCallHandler.log.last,
-        isMethodCall(ServiceApiMethod.stopService, arguments: null),
+        isMethodCall(ServiceApiMethod.stopService, arguments: true),
+      );
+    });
+
+    test('stopService can preserve a dismissible notification', () async {
+      platformChannel.platform = platform;
+      FlutterForegroundTask.skipServiceResponseCheck = true;
+
+      _init(dummyData);
+      await _startService(dummyData);
+
+      final result = await _stopService(removeNotification: false);
+
+      expect(result, isA<ServiceRequestSuccess>());
+      expect(
+        methodCallHandler.log.last,
+        isMethodCall(ServiceApiMethod.stopService, arguments: false),
       );
     });
 
@@ -428,7 +444,7 @@ void main() {
       expect(result2, isA<ServiceRequestSuccess>());
       expect(
         methodCallHandler.log.last,
-        isMethodCall(ServiceApiMethod.stopService, arguments: null),
+        isMethodCall(ServiceApiMethod.stopService, arguments: true),
       );
     });
 
@@ -535,12 +551,16 @@ Future<ServiceRequestResult> _updateService(ServiceDummyData dummyData) {
     notificationIcon: dummyData.notificationIcon,
     notificationProgress: dummyData.notificationProgress,
     notificationButtons: dummyData.notificationButtons,
+    notificationOngoing: false,
+    notificationAutoCancel: true,
     callback: testCallback,
   );
 }
 
-Future<ServiceRequestResult> _stopService() {
-  return FlutterForegroundTask.stopService();
+Future<ServiceRequestResult> _stopService({bool removeNotification = true}) {
+  return FlutterForegroundTask.stopService(
+    removeNotification: removeNotification,
+  );
 }
 
 Future<bool> get _isRunningService {

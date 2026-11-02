@@ -21,6 +21,8 @@ class ServiceStartOptions {
     this.notificationIcon,
     this.notificationProgress,
     this.notificationButtons,
+    this.notificationOngoing = true,
+    this.notificationAutoCancel = false,
     this.notificationInitialRoute,
     this.callback,
   });
@@ -35,6 +37,8 @@ class ServiceStartOptions {
   final NotificationIcon? notificationIcon;
   final NotificationProgress? notificationProgress;
   final List<NotificationButton>? notificationButtons;
+  final bool notificationOngoing;
+  final bool notificationAutoCancel;
   final String? notificationInitialRoute;
   final Function? callback;
 
@@ -48,6 +52,8 @@ class ServiceStartOptions {
       'icon': notificationIcon?.toJson(),
       'progress': notificationProgress?.toJson(),
       'buttons': notificationButtons?.map((e) => e.toJson()).toList(),
+      'notificationOngoing': notificationOngoing,
+      'notificationAutoCancel': notificationAutoCancel,
       'initialRoute': notificationInitialRoute,
     };
 
@@ -75,6 +81,8 @@ class ServiceUpdateOptions {
     this.notificationIcon,
     this.notificationProgress,
     this.notificationButtons,
+    this.notificationOngoing,
+    this.notificationAutoCancel,
     this.notificationInitialRoute,
     this.callback,
   });
@@ -85,6 +93,8 @@ class ServiceUpdateOptions {
   final NotificationIcon? notificationIcon;
   final NotificationProgress? notificationProgress;
   final List<NotificationButton>? notificationButtons;
+  final bool? notificationOngoing;
+  final bool? notificationAutoCancel;
   final String? notificationInitialRoute;
   final Function? callback;
 
@@ -95,6 +105,8 @@ class ServiceUpdateOptions {
       'icon': notificationIcon?.toJson(),
       'progress': notificationProgress?.toJson(),
       'buttons': notificationButtons?.map((e) => e.toJson()).toList(),
+      'notificationOngoing': notificationOngoing,
+      'notificationAutoCancel': notificationAutoCancel,
       'initialRoute': notificationInitialRoute,
     };
 

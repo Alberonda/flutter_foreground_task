@@ -18,8 +18,10 @@ class AndroidNotificationOptions {
     this.showBadge = false,
     this.onlyAlertOnce = false,
     this.visibility = NotificationVisibility.VISIBILITY_PUBLIC,
-  })  : assert(channelId.isNotEmpty),
-        assert(channelName.isNotEmpty);
+    this.ongoing = true,
+    this.autoCancel = false,
+  }) : assert(channelId.isNotEmpty),
+       assert(channelName.isNotEmpty);
 
   /// Unique ID of the notification.
   final int? id;
@@ -79,6 +81,14 @@ class AndroidNotificationOptions {
   /// The default is `NotificationVisibility.VISIBILITY_PUBLIC`.
   final NotificationVisibility visibility;
 
+  /// Whether the notification stays ongoing and cannot be dismissed.
+  /// The default is `true` for foreground service notifications.
+  final bool ongoing;
+
+  /// Whether tapping the notification dismisses it.
+  /// The default is `false`.
+  final bool autoCancel;
+
   /// Returns the data fields of [AndroidNotificationOptions] in JSON format.
   Map<String, dynamic> toJson() {
     return {
@@ -94,6 +104,8 @@ class AndroidNotificationOptions {
       'showBadge': showBadge,
       'onlyAlertOnce': onlyAlertOnce,
       'visibility': visibility.rawValue,
+      'notificationOngoing': ongoing,
+      'notificationAutoCancel': autoCancel,
     };
   }
 
@@ -110,20 +122,23 @@ class AndroidNotificationOptions {
     bool? showBadge,
     bool? onlyAlertOnce,
     NotificationVisibility? visibility,
-  }) =>
-      AndroidNotificationOptions(
-        channelId: channelId ?? this.channelId,
-        channelName: channelName ?? this.channelName,
-        channelDescription: channelDescription ?? this.channelDescription,
-        channelImportance: channelImportance ?? this.channelImportance,
-        priority: priority ?? this.priority,
-        enableVibration: enableVibration ?? this.enableVibration,
-        playSound: playSound ?? this.playSound,
-        showWhen: showWhen ?? this.showWhen,
-        showBadge: showBadge ?? this.showBadge,
-        onlyAlertOnce: onlyAlertOnce ?? this.onlyAlertOnce,
-        visibility: visibility ?? this.visibility,
-      );
+    bool? ongoing,
+    bool? autoCancel,
+  }) => AndroidNotificationOptions(
+    channelId: channelId ?? this.channelId,
+    channelName: channelName ?? this.channelName,
+    channelDescription: channelDescription ?? this.channelDescription,
+    channelImportance: channelImportance ?? this.channelImportance,
+    priority: priority ?? this.priority,
+    enableVibration: enableVibration ?? this.enableVibration,
+    playSound: playSound ?? this.playSound,
+    showWhen: showWhen ?? this.showWhen,
+    showBadge: showBadge ?? this.showBadge,
+    onlyAlertOnce: onlyAlertOnce ?? this.onlyAlertOnce,
+    visibility: visibility ?? this.visibility,
+    ongoing: ongoing ?? this.ongoing,
+    autoCancel: autoCancel ?? this.autoCancel,
+  );
 }
 
 /// Notification options for iOS platform.

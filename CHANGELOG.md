@@ -1,3 +1,8 @@
+## 10.2.0
+
+* [**FEAT**] Allow foreground service notifications to become dismissible after the service stops.
+* [**FEAT**] Configure notification ongoing and auto-cancel behavior when starting or updating a service.
+
 ## 10.1.0
 
 * [**FEAT**] Support determinate and indeterminate progress in the foreground notification.

@@ -35,6 +35,8 @@ object PreferencesKey {
     const val SHOW_BADGE = "showBadge"
     const val ONLY_ALERT_ONCE = "onlyAlertOnce"
     const val VISIBILITY = "visibility"
+    const val NOTIFICATION_ONGOING = "notificationOngoing"
+    const val NOTIFICATION_AUTO_CANCEL = "notificationAutoCancel"
 
     // notification content
     const val NOTIFICATION_CONTENT_TITLE = "notificationContentTitle"

@@ -15,7 +15,9 @@ data class NotificationOptions(
     val showWhen: Boolean,
     val showBadge: Boolean,
     val onlyAlertOnce: Boolean,
-    val visibility: Int
+    val visibility: Int,
+    val ongoing: Boolean,
+    val autoCancel: Boolean
 ) {
     companion object {
         fun getData(context: Context): NotificationOptions {
@@ -34,6 +36,8 @@ data class NotificationOptions(
             val showBadge = prefs.getBoolean(PrefsKey.SHOW_BADGE, false)
             val onlyAlertOnce = prefs.getBoolean(PrefsKey.ONLY_ALERT_ONCE, false)
             val visibility = prefs.getInt(PrefsKey.VISIBILITY, 1)
+            val ongoing = prefs.getBoolean(PrefsKey.NOTIFICATION_ONGOING, true)
+            val autoCancel = prefs.getBoolean(PrefsKey.NOTIFICATION_AUTO_CANCEL, false)
 
             return NotificationOptions(
                 serviceId = serviceId,
@@ -47,7 +51,9 @@ data class NotificationOptions(
                 showWhen = showWhen,
                 showBadge = showBadge,
                 onlyAlertOnce = onlyAlertOnce,
-                visibility = visibility
+                visibility = visibility,
+                ongoing = ongoing,
+                autoCancel = autoCancel
             )
         }
 
@@ -69,6 +75,8 @@ data class NotificationOptions(
             val showBadge = map?.get(PrefsKey.SHOW_BADGE) as? Boolean ?: false
             val onlyAlertOnce = map?.get(PrefsKey.ONLY_ALERT_ONCE) as? Boolean ?: false
             val visibility = map?.get(PrefsKey.VISIBILITY) as? Int ?: 1
+            val ongoing = map?.get(PrefsKey.NOTIFICATION_ONGOING) as? Boolean ?: true
+            val autoCancel = map?.get(PrefsKey.NOTIFICATION_AUTO_CANCEL) as? Boolean ?: false
 
             with(prefs.edit()) {
                 putInt(PrefsKey.SERVICE_ID, serviceId)
@@ -83,8 +91,23 @@ data class NotificationOptions(
                 putBoolean(PrefsKey.SHOW_BADGE, showBadge)
                 putBoolean(PrefsKey.ONLY_ALERT_ONCE, onlyAlertOnce)
                 putInt(PrefsKey.VISIBILITY, visibility)
+                putBoolean(PrefsKey.NOTIFICATION_ONGOING, ongoing)
+                putBoolean(PrefsKey.NOTIFICATION_AUTO_CANCEL, autoCancel)
                 commit()
             }
+        }
+
+        fun updateData(context: Context, map: Map<*, *>?) {
+            val prefs = context.getSharedPreferences(
+                PrefsKey.NOTIFICATION_OPTIONS_PREFS, Context.MODE_PRIVATE)
+            val editor = prefs.edit()
+            (map?.get(PrefsKey.NOTIFICATION_ONGOING) as? Boolean)?.let {
+                editor.putBoolean(PrefsKey.NOTIFICATION_ONGOING, it)
+            }
+            (map?.get(PrefsKey.NOTIFICATION_AUTO_CANCEL) as? Boolean)?.let {
+                editor.putBoolean(PrefsKey.NOTIFICATION_AUTO_CANCEL, it)
+            }
+            editor.commit()
         }
 
         fun clearData(context: Context) {

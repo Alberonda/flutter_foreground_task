@@ -74,6 +74,8 @@ class ServiceDummyData {
       notificationIcon: notificationIcon,
       notificationProgress: notificationProgress,
       notificationButtons: notificationButtons,
+      notificationOngoing: true,
+      notificationAutoCancel: false,
       callback: testCallback,
     ).toJson(platform);
   }
@@ -86,6 +88,8 @@ class ServiceDummyData {
       notificationIcon: notificationIcon,
       notificationProgress: notificationProgress,
       notificationButtons: notificationButtons,
+      notificationOngoing: false,
+      notificationAutoCancel: true,
       callback: testCallback,
     ).toJson(platform);
   }

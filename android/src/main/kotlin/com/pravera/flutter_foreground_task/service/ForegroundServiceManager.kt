@@ -58,6 +58,7 @@ class ForegroundServiceManager {
 		val argsMap = arguments as? Map<*, *>
 		ForegroundServiceStatus.setData(context, ForegroundServiceAction.API_UPDATE)
 		ForegroundTaskOptions.updateData(context, argsMap)
+		NotificationOptions.updateData(context, argsMap)
 		ForegroundTaskData.updateData(context, argsMap)
 		NotificationContent.updateData(context, argsMap)
 		// Use startService instead of startForegroundService because the service
@@ -67,12 +68,14 @@ class ForegroundServiceManager {
 	}
 
 	/** Stop the foreground service. */
-	fun stop(context: Context) {
+	fun stop(context: Context, arguments: Any?) {
 		if (!isRunningService()) {
 			throw ServiceNotStartedException()
 		}
 
+		val removeNotification = arguments as? Boolean ?: true
 		val nIntent = Intent(context, ForegroundService::class.java)
+		nIntent.putExtra(ForegroundService.INTENT_REMOVE_NOTIFICATION, removeNotification)
 		ForegroundServiceStatus.setData(context, ForegroundServiceAction.API_STOP)
 		ForegroundServiceTypes.clearData(context)
 		NotificationOptions.clearData(context)

@@ -166,6 +166,8 @@ class FlutterForegroundTask {
     NotificationIcon? notificationIcon,
     NotificationProgress? notificationProgress,
     List<NotificationButton>? notificationButtons,
+    bool? notificationOngoing,
+    bool? notificationAutoCancel,
     String? notificationInitialRoute,
     Function? callback,
   }) async {
@@ -181,6 +183,8 @@ class FlutterForegroundTask {
         notificationIcon: notificationIcon,
         notificationProgress: notificationProgress,
         notificationButtons: notificationButtons,
+        notificationOngoing: notificationOngoing,
+        notificationAutoCancel: notificationAutoCancel,
         notificationInitialRoute: notificationInitialRoute,
         callback: callback,
       );
@@ -192,13 +196,15 @@ class FlutterForegroundTask {
   }
 
   /// Stop the foreground service.
-  static Future<ServiceRequestResult> stopService() async {
+  static Future<ServiceRequestResult> stopService({
+    bool removeNotification = true,
+  }) async {
     try {
       if (!(await isRunningService)) {
         throw ServiceNotStartedException();
       }
 
-      await _platform.stopService();
+      await _platform.stopService(removeNotification: removeNotification);
 
       if (!skipServiceResponseCheck) {
         await checkServiceStateChange(target: false);
